@@ -20,7 +20,7 @@ class LeassonsScreen extends StatelessWidget {
       appBar: AppBar(
         actions: [
           IconButton(
-            icon: Icon(Icons.access_alarm),
+            icon: Icon(Icons.ac_unit),
             onPressed: () {
               Navigator.pop(context);
             },
