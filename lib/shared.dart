@@ -1,7 +1,11 @@
+//dependencies
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:easy_rich_text/easy_rich_text.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+//local
 import 'main.dart';
 
 List<ActiveProp> activeLevelsData = [
@@ -50,8 +54,8 @@ class CardLevel extends StatelessWidget {
       padding: const EdgeInsets.only(top: 30.0, right: 4, left: 18),
       child: Center(
         child: Container(
-          height: 154,
-          width: 375,
+          height: 154.h,
+          width: 375.w,
           decoration: BoxDecoration(
             color: Color(0xFBFFFF).withOpacity(1),
             borderRadius: BorderRadius.all(
@@ -61,7 +65,7 @@ class CardLevel extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(width: 20),
+              SizedBox(width: 20.w),
               Align(
                 alignment: Alignment.center,
                 child: Text(
@@ -75,21 +79,21 @@ class CardLevel extends StatelessWidget {
               ),
               SizedBox(width: 20),
               Container(
-                width: 214,
+                width: 214.w,
                 child: Row(
                   children: [
                     Container(
-                        height: 140,
-                        width: 194,
+                        height: 140.h,
+                        width: 193.w,
                         child: roundedRectBorderWidget(
                             levelNo: '$cardNoT',
                             achievedEx: achievedEx,
                             achievedSec: achievedSec,
                             cardColor: cardColor)),
-                    SizedBox(width: 11),
+                    SizedBox(width: 10),
                     Container(
-                      height: 154,
-                      width: 9,
+                      height: 154.h,
+                      width: 9.w,
                       decoration: BoxDecoration(
                           color: cardColor.withOpacity(1),
                           borderRadius: BorderRadius.only(

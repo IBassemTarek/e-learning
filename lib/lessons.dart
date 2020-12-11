@@ -1,13 +1,40 @@
+//dependencies
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts_arabic/fonts.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dotted_border/dotted_border.dart';
+
+import 'package:flutter_svg/flutter_svg.dart';
+//local
 import 'shared.dart';
+
+
+
+  Widget customBorder ({bool done}){
+    
+    // Creating a custom path
+    Path customPath = Path()
+      ..moveTo(350.w, 2.h)
+      ..lineTo(350.w, 32.h);
+
+
+    return DottedBorder(
+      customPath: (_) => customPath,
+      color: done?Color(0x88C9F9).withOpacity(1):Color(0xC4C5C6).withOpacity(0.25),
+      dashPattern: [8, 4],
+      strokeWidth: 2,
+      child: Container(
+height: 30.h,
+        
+      ),
+    );
+  }
 
 // ignore: must_be_immutable
 class LeassonsScreen extends StatelessWidget {
   int index;
+  final examDone= false;
   LeassonsScreen({this.index});
   @override
   Widget build(BuildContext context) {
@@ -17,20 +44,10 @@ class LeassonsScreen extends StatelessWidget {
       allowFontScaling: false,
     );
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            color: Colors.blue,
+            color: Colors.white,
             child: Column(
               children: [
                 //TODO:search "appbar"
@@ -45,13 +62,13 @@ class LeassonsScreen extends StatelessWidget {
                           "A",
                           textAlign: TextAlign.left,
                           style: GoogleFonts.lobster().copyWith(
-                              fontSize: 72,
+                              fontSize: 72.ssp,
                               color: Color(0x494955).withOpacity(1)),
                         ),
                       ),
                       Container(
-                        width: 155,
-                        height: 115,
+                        width: 155.w,
+                        height: 123.h,
                         child: BorderContent(
                           levelNo: activeLevelsData[index].cardNoT,
                           cardColor: activeLevelsData[index].cardColor,
@@ -62,7 +79,7 @@ class LeassonsScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 48),
+                SizedBox(height: 48.h),
                 Container(
                   alignment: Alignment.centerRight,
                   padding: EdgeInsets.only(left: 13, right: 13),
@@ -72,28 +89,159 @@ class LeassonsScreen extends StatelessWidget {
                     color: Color(0xBDBDDE).withOpacity(1),
                     borderType: BorderType.RRect,
                     radius: Radius.circular(10),
-                    padding: EdgeInsets.only(right: 6, top: 24),
+                    padding:
+                        EdgeInsets.only(right: 6, top: 24, left: 6, bottom: 24),
                     child: ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
-                      child: Container(
-                        width: MediaQuery.of(context).size.height,
-                        height: (MediaQuery.of(context).size.height),
-                        child: ListView.separated(
-                          itemCount: lessonsData.length,
-                          separatorBuilder: (BuildContext context, int index) =>
-                              SizedBox(
-                            height: 30,
+                      child: Column(
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            height:
+                                (MediaQuery.of(context).size.height - 180.w),
+                            child: ListView.separated(
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: lessonsData.length,
+                              separatorBuilder:
+                                  (BuildContext context, int index) {
+                                    return customBorder(done:lessonsData[index].done );
+                                  },
+                              itemBuilder: (BuildContext context, int i) {
+                                return SingleLesson(
+                                  done: lessonsData[i].done,
+                                  index: i,
+                                  operate: lessonsData[i].operate,
+                                  subTitle: lessonsData[i].subTitle,
+                                  title: lessonsData[i].title,
+                                );
+                              },
+                            ),
                           ),
-                          itemBuilder: (BuildContext context, int i) {
-                            return SingleLesson(
-                              done: lessonsData[i].done,
-                              index: i,
-                              operate: lessonsData[i].operate,
-                              subTitle: lessonsData[i].subTitle,
-                              title: lessonsData[i].title,
-                            );
-                          },
-                        ),
+customBorder(done:examDone ),
+                          // exam
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                '!',
+                                style: GoogleFonts.keaniaOne().copyWith(
+                                  fontSize: 24.ssp,
+                                  color: Color(0xD8D8D8).withOpacity(1),
+                                ),
+                              ),
+                              Container(
+                                width: 329.w,
+                                height: 190.h,
+                                decoration: BoxDecoration(
+                                  color: Color(0xFAFAFA).withOpacity(0.8),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    ListTile(
+                                      trailing: Icon(
+                                        Icons.circle,
+                                        color: Color(0xF7F7F7).withOpacity(0.6),
+                                        size: 18.ssp,
+                                      ),
+                                      title: Text(
+                                        'الإمتحان الأول',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          fontFamily: ArabicFonts.Cairo,
+                                          package: 'google_fonts_arabic',
+                                          fontSize: 18.0.ssp,
+                                          color: Color(0x0F87B3).withOpacity(1),
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        'أساسيات برمجة , أو أي مسمي',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            fontFamily: ArabicFonts.Cairo,
+                                            package: 'google_fonts_arabic',
+                                            fontSize: 14.0.ssp,
+                                            color:
+                                                Color(0xA19A9A).withOpacity(1)),
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        SvgPicture.asset("images/Frame4.svg",
+                                            height: 105,
+                                            width: 105,
+                                            matchTextDirection: false),
+                                        Column(
+                                          children: [
+                                            Align(
+                                              alignment: Alignment.topRight,
+                                              child: Text(
+                                                'تفاصيل',
+                                                textAlign: TextAlign.right,
+                                                style: TextStyle(
+                                                  fontFamily: ArabicFonts.Cairo,
+                                                  package:
+                                                      'google_fonts_arabic',
+                                                  fontSize: 12.0.ssp,
+                                                  color: Color(0x818181)
+                                                      .withOpacity(1),
+                                                ),
+                                              ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text("١٣ سؤال ",
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          ArabicFonts.Cairo,
+                                                      package:
+                                                          'google_fonts_arabic',
+                                                      fontSize: 10.0.ssp,
+                                                      color: Color(0x818181)
+                                                          .withOpacity(1),
+                                                    )),
+                                                Icon(Icons.help_outline,
+                                                    color: Color(0x87878B)
+                                                        .withOpacity(1),
+                                                    size: 12.ssp),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text("٣٠ دقيقة",
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          ArabicFonts.Cairo,
+                                                      package:
+                                                          'google_fonts_arabic',
+                                                      fontSize: 10.0.ssp,
+                                                      color: Color(0x818181)
+                                                          .withOpacity(1),
+                                                    )),
+                                                Icon(Icons.schedule,
+                                                    color: Color(0x87878B)
+                                                        .withOpacity(1),
+                                                    size: 12.ssp),
+                                              ],
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
 
                       //   Column(
@@ -126,13 +274,33 @@ List<LessonsDataModel> lessonsData = [
       title: 'ما هي لغة فلاتر',
       subTitle: 'نص فرعي صغير'),
   LessonsDataModel(
-      done: false,
+      done: true,
+      operate: false,
+      title: 'ما هي لغة فلاتر',
+      subTitle: 'نص فرعي صغير'),
+  LessonsDataModel(
+      done: true,
       operate: false,
       title: 'ما هي لغة فلاتر',
       subTitle: 'نص فرعي صغير'),
   LessonsDataModel(
       done: false,
       operate: true,
+      title: 'ما هي لغة فلاتر',
+      subTitle: 'نص فرعي صغير'),
+  LessonsDataModel(
+      done: false,
+      operate: false,
+      title: 'ما هي لغة فلاتر',
+      subTitle: 'نص فرعي صغير'),
+  LessonsDataModel(
+      done: false,
+      operate: false,
+      title: 'ما هي لغة فلاتر',
+      subTitle: 'نص فرعي صغير'),
+  LessonsDataModel(
+      done: false,
+      operate: false,
       title: 'ما هي لغة فلاتر',
       subTitle: 'نص فرعي صغير')
 ];
@@ -150,26 +318,23 @@ class SingleLesson extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         (() {
           if (done && !operate) {
             return Icon(Icons.check,
-                color: Color(0xA8EEEE).withOpacity(1), size: 18);
+                color: Color(0xA8EEEE).withOpacity(1), size: 18.ssp);
           } else if (operate)
             return Icon(Icons.circle,
-                color: Color(0xA8EEEE).withOpacity(1), size: 18);
+                color: Color(0xA8EEEE).withOpacity(1), size: 18.ssp);
           else {
             return Icon(Icons.maximize,
-                color: Color(0xD8D8D8).withOpacity(1), size: 18);
+                color: Color(0xD8D8D8).withOpacity(1), size: 18.ssp);
           }
         })(),
-        SizedBox(
-          width: (!operate) ? 67 : 27,
-        ),
         Container(
-          width: (operate) ? 326 : 286,
-          height: 67,
+          width: (operate) ? 326.w : 286.w,
+          height: 67.h,
           decoration: BoxDecoration(
             color: (() {
               if (done && !operate) {
@@ -177,7 +342,7 @@ class SingleLesson extends StatelessWidget {
               } else if (operate)
                 return Color(0x494955).withOpacity(1);
               else {
-                return Color(0xD8D8D8).withOpacity(0.50);
+                return Color(0xFAFAFA).withOpacity(0.8); //FAFAFA
               }
             })(),
             borderRadius: BorderRadius.all(
@@ -190,39 +355,39 @@ class SingleLesson extends StatelessWidget {
             children: [
               Align(
                 alignment: Alignment.center,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 17),
-                  child: Text(
-                    "${index + 1}",
-                    textAlign: TextAlign.left,
-                    style: GoogleFonts.keaniaOne().copyWith(
-                      fontSize: operate ? 48 : 36,
-                      color: (() {
-                        if (done && !operate) {
-                          return Color(0x639AAE).withOpacity(1);
-                        } else if (operate)
-                          return Color(0xF7F7F7).withOpacity(1);
-                        else {
-                          return Color(0xD8D8D8).withOpacity(1);
-                        }
-                      })(),
-                    ),
+                child: Text(
+                  "${index + 1}",
+                  textAlign: TextAlign.left,
+                  style: GoogleFonts.keaniaOne().copyWith(
+                    fontSize: operate ? 48.ssp : 36.ssp,
+                    color: (() {
+                      if (done && !operate) {
+                        return Color(0x639AAE).withOpacity(1);
+                      } else if (operate)
+                        return Color(0xF7F7F7).withOpacity(1);
+                      else {
+                        return Color(0xD8D8D8).withOpacity(1);
+                      }
+                    })(),
                   ),
                 ),
               ),
-              SizedBox(
-                width: 88,
-              ),
               Container(
-                width: 155,
-                height: 60,
+                width: (operate) ? 286.w : 254.w,
+                height: 67.h,
                 child: ListTile(
                   trailing: Icon(
                     Icons.circle,
-                    color: operate
-                        ? Color(0xC4C4C4).withOpacity(0.11)
-                        : Color(0x287EBF).withOpacity(0.2),
-                    size: 18,
+                    color: (() {
+                      if (done && !operate) {
+                        return Color(0x287EBF).withOpacity(0.2);
+                      } else if (operate)
+                        return Color(0xC4C4C4).withOpacity(0.11);
+                      else {
+                        return Color(0xF7F7F7).withOpacity(0.6);
+                      }
+                    })(),
+                    size: 18.ssp,
                   ),
                   title: Text(title,
                       // 'ما هي لغة فلاتر',
@@ -230,7 +395,7 @@ class SingleLesson extends StatelessWidget {
                       style: TextStyle(
                           fontFamily: ArabicFonts.Cairo,
                           package: 'google_fonts_arabic',
-                          fontSize: 14.0,
+                          fontSize: 14.0.ssp,
                           color: operate
                               ? Colors.white
                               : Color(0x639AAE).withOpacity(1))),
@@ -241,7 +406,7 @@ class SingleLesson extends StatelessWidget {
                     style: TextStyle(
                         fontFamily: ArabicFonts.Cairo,
                         package: 'google_fonts_arabic',
-                        fontSize: 12.0,
+                        fontSize: 12.0.ssp,
                         color: operate
                             ? Color(0xB7B7B7).withOpacity(1)
                             : Color(0x639AAE).withOpacity(0.9)),

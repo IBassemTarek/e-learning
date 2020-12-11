@@ -1,14 +1,20 @@
+//dependencies
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts_arabic/fonts.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:easy_rich_text/easy_rich_text.dart';
+import 'search.dart';
+//local
 import 'package:x/lessons.dart';
 import 'package:x/shared.dart';
 
+
 void main() {
-  runApp(MyApp());
+runApp(MyApp());
+
+     
 }
 
 class MyApp extends StatelessWidget {
@@ -17,6 +23,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
+      theme: ThemeData(
+        textTheme: GoogleFonts.cairoTextTheme(
+          //TODO:make styles
+        )
+
+      ),
       home: MyHomePage(),
     );
   }
@@ -26,15 +38,31 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // final _height = MediaQuery.of(context).size.height ;
+    // final _savingHeight = _height - MediaQuery.of(context).padding.top ;
+    // final _HeightWithoutAppBar = _savingHeight - kToolbarHeight;
+    // final _width =  MediaQuery.of(context).size.width ;
     ScreenUtil.init(
       context,
       designSize: Size(414, 854),
       allowFontScaling: false,
     );
-
+    ScreenUtil().bottomBarHeight ;//Bottom safe zone distance, suitable for buttons with full screen
+    ScreenUtil().statusBarHeight  ;//Status bar height , Notch will be higher Unit px
+   
+//(parent)flexable->fractionallysizedbox:heightfactor,widthfactor
+//(childs)layoutbuilder (ctx,constraints)   .. any height and width -> constraints.maxheight*0.5  // maxheight is for parent size  
     return Scaffold(
+      appBar: AppBar(
+        title:Text('sdf'),
+        actions: <Widget> [
+          IconButton(icon:Icon(Icons.search),onPressed:(){
+            showSearch(context:context,delegate:SearchIcon());
+          })
+        ]
+      ),
       body: SafeArea(
-        child: SingleChildScrollView(
+              child: SingleChildScrollView(
           child: Container(
             color: Colors.blue,
             child: Column(
@@ -55,9 +83,10 @@ class MyHomePage extends StatelessWidget {
                     ),
                   ),
                 ),
+                //wrap , expanded
                 Container(
-                  height: 374,
-                  width: 414,
+                  height: 374.h,
+                  width: 414.w,
                   child: ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: activeLevelsData.length,
@@ -83,8 +112,8 @@ class MyHomePage extends StatelessWidget {
 
                 //late levels
                 Container(
-                  height: 354,
-                  width: 414,
+                  height: 354.h,
+                  width: 414.w,
                   child: ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: lateLevelsData.length,
@@ -146,8 +175,8 @@ class ActiveProp {
 
 Widget lateLevel({String levelNo, int secs, int exs}) {
   return Container(
-    height: 118,
-    width: 280,
+    height: 118.h,
+    width: 280.w,
     margin: const EdgeInsets.only(left: 65.0, right: 69.0, top: 26),
     child: DottedBorder(
       strokeWidth: 1.5,
